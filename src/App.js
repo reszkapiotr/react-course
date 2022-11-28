@@ -47,11 +47,15 @@ const App = () => {
 
   const [stories, setStories] = React.useState([]);
   const [isLoading, setLoading] = React.useState(false);
+  const [isError, setError] = React.useState(false);
 
   React.useEffect(() => {
     setLoading(true);
     getAsyncStories().then(result => {
       setStories(result.data.stories);
+      setLoading(false);
+    }).catch(() => {
+      setError(true);
       setLoading(false);
     });
   }, []);
@@ -86,9 +90,15 @@ const App = () => {
       </InputWithLabel>
 
       <hr />
-
-      {isLoading ? (<p>Loading</p>) :
-        (<List list={searchedStories} onRemoveItem={handleRemoveStory} />)}
+      {
+        isError ?
+          <p>error</p> : <></>
+      }
+      {
+        isLoading ?
+          (<p>Loading</p>) :
+          (<List list={searchedStories} onRemoveItem={handleRemoveStory}/>)
+      }
     </div>
   );
 };
