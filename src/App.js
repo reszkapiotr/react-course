@@ -46,10 +46,13 @@ const App = () => {
   );
 
   const [stories, setStories] = React.useState([]);
+  const [isLoading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
+    setLoading(true);
     getAsyncStories().then(result => {
       setStories(result.data.stories);
+      setLoading(false);
     });
   }, []);
 
@@ -84,7 +87,8 @@ const App = () => {
 
       <hr />
 
-      <List list={searchedStories} onRemoveItem={handleRemoveStory} />
+      {isLoading ? (<p>Loading</p>) :
+        (<List list={searchedStories} onRemoveItem={handleRemoveStory} />)}
     </div>
   );
 };
