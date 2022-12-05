@@ -1,5 +1,6 @@
 import app from 'firebase/compat/app';
 import "firebase/compat/auth";
+import 'firebase/compat/database'
 
 const config = {
     apiKey: "AIzaSyBnbAwqkAfaa6IaSXQ5jgvgjEV64lbmfXM",
@@ -15,6 +16,7 @@ class Firebase {
     constructor() {
         app.initializeApp(config);
         this.auth = app.auth();
+        this.db = app.database();
     }
 
     doCreateUserWithEmailAndPassword = (email, password) =>
@@ -27,6 +29,12 @@ class Firebase {
 
     deleteAccount = () =>
         this.auth.currentUser.delete();
+
+    // Direct DB connection
+
+    user = uid => this.db.ref(`users/${uid}`);
+
+    users = () => this.db.ref('users');
 }
 
 export default Firebase;
