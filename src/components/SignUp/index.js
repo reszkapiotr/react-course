@@ -2,14 +2,12 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 
 import * as ROUTES from '../../constants/routes';
-import {FirebaseContext} from "../Firebase";
+import {FirebaseContext, withFirebase} from "../Firebase";
 
 const SignUpPage = () => (
     <div>
         <h1>SignUp</h1>
-        <FirebaseContext.Consumer>
-            {firebase => <SignUpForm firebase = {firebase}/>}
-        </FirebaseContext.Consumer>
+        <SignUpForm/>
     </div>
 );
 
@@ -21,7 +19,7 @@ const INITIAL_STATE = {
     error: null,
 };
 
-class SignUpForm extends Component {
+class SignUpFormBase extends Component {
     constructor(props) {
         super(props);
         this.state = {...INITIAL_STATE};
@@ -35,6 +33,7 @@ class SignUpForm extends Component {
             .then(authUser => {
                 this.setState({...INITIAL_STATE});
                 console.log(authUser);
+                this.props.history.push(ROUTES.HOME);
             })
             .catch(error => {
                 this.setState({error});
@@ -100,6 +99,8 @@ class SignUpForm extends Component {
         );
     }
 }
+
+const SignUpForm = withFirebase(SignUpFormBase);
 
 const SignUpLink = () => (
     <p>
